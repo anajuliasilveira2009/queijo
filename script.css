@@ -1,26 +1,52 @@
 const perguntas = [
     {
-        pergunta: "quantidade de queijos",
-    }
-    {
-        pergunta: "Qual variedade voce quer?",
+        pergunta: "Qual é o nome do queijo artesanal mineiro que possui o Selo Arte?",
         alternativas: [
-            { texto: "muçarela "}
-            { texto: "colonial" }
+            { texto: "Queijo Coalho", correta: false },
+            { texto: "Queijo Canastra", correta: true },
+            { texto: "Queijo Prato", correta: false }
         ]
     },
     {
-        pergunta: "voce gosta mais maduro ou recente?",
+        pergunta: "Qual é a principal preocupação ao enviar queijos curados por delivery?",
         alternativas: [
-            { texto: "maduro" }
-            { texto: "recente" }
+            { texto: "Quebrar a embalagem plástica", correta: false },
+            { texto: "Manter a cadeia de frio (refrigeração)", correta: true },
+            { texto: "Escolher a cor da caixa", correta: false }
+        ]
+    },
+    {
+        pergunta: "Qual bebida harmoniza classicamente com queijos azuis (como o Gorgonzola)?",
+        alternativas: [
+            { texto: "Cerveja Pilsen leve", correta: false },
+            { texto: "Vinho Tinto Suave", correta: false },
+            { texto: "Vinho do Porto (ou Vinhos Doces)", correta: true }
+        ]
+    },
+    {
+        pergunta: "Qual método de venda é mais adequado para queijos frescos (como Ricota)?",
+        alternativas: [
+            { texto: "Envio por PAC em 15 dias", correta: false },
+            { texto: "Venda apenas para clientes locais (entrega rápida ou retirada)", correta: true },
+            { texto: "Deixar em temperatura ambiente", correta: false }
+        ]
+    },
+    {
+        pergunta: "Para atrair clientes online, a descrição do queijo deve focar em:",
+        alternativas: [
+            { texto: "Apenas o preço", correta: false },
+            { texto: "A história, textura e notas de sabor", correta: true },
+            { texto: "O peso exato em gramas", correta: false }
         ]
     }
 ];
 
-const caixaPerguntas = document.querySelector("perguntas sobre o queijo");
-const caixaAlternativas = document.querySelector(".lternativas queijo");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const textoResultado = document.querySelector(".texto-resultado");
 
+let indiceAtual = 0;
+let acertos = 0;
 
 function mostraPergunta() {
     if (indiceAtual >= perguntas.length) {
@@ -28,9 +54,12 @@ function mostraPergunta() {
         return;
     }
 
+    // Atualiza o título da pergunta
     caixaPerguntas.textContent = perguntas[indiceAtual].pergunta;
+    // Limpa os botões antigos
     caixaAlternativas.innerHTML = "";
 
+    // Cria os novos botões para as alternativas
     perguntas[indiceAtual].alternativas.forEach(alternativa => {
         const botao = document.createElement("button");
         botao.textContent = alternativa.texto;
@@ -40,15 +69,35 @@ function mostraPergunta() {
 }
 
 function verificaResposta(correta) {
+    // Adiciona a classe para feedback visual (se o CSS estiver configurado)
+    // Exemplo: if (correta) { this.classList.add('correta'); }
+
     if (correta) acertos++;
-    indiceAtual++;
-    mostraPergunta();
+    
+    // Pequeno atraso (opcional) para o usuário ver a resposta antes de mudar
+    setTimeout(() => {
+        indiceAtual++;
+        mostraPergunta();
+    }, 50); // Atraso de 50 milissegundos
 }
 
 function mostraResultado() {
-    caixaPerguntas.textContent = "Missão concluída!";
+    caixaPerguntas.textContent = "Parabéns, Mestre Queijeiro!";
     caixaAlternativas.innerHTML = "";
-    textoResultado.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
+    
+    let mensagem;
+    const percentual = (acertos / perguntas.length) * 100;
+    
+    if (percentual === 100) {
+        mensagem = "Nota 10! Você domina a arte e a ciência da venda de queijos.";
+    } else if (percentual >= 60) {
+        mensagem = "Quase lá! Ótimo conhecimento, mas há espaço para aprimorar as vendas.";
+    } else {
+        mensagem = "Continue estudando! O mundo dos queijos é complexo e delicioso.";
+    }
+
+    textoResultado.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas. ${mensagem}`;
 }
 
+// Inicia o quiz
 mostraPergunta();
