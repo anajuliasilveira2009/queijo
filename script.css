@@ -1,0 +1,54 @@
+const perguntas = [
+    {
+        pergunta: "quantidade de queijos",
+    }
+    {
+        pergunta: "Qual variedade voce quer?",
+        alternativas: [
+            { texto: "muçarela "}
+            { texto: "colonial" }
+        ]
+    },
+    {
+        pergunta: "voce gosta mais maduro ou recente?",
+        alternativas: [
+            { texto: "maduro" }
+            { texto: "recente" }
+        ]
+    }
+];
+
+const caixaPerguntas = document.querySelector("perguntas sobre o queijo");
+const caixaAlternativas = document.querySelector(".lternativas queijo");
+
+
+function mostraPergunta() {
+    if (indiceAtual >= perguntas.length) {
+        mostraResultado();
+        return;
+    }
+
+    caixaPerguntas.textContent = perguntas[indiceAtual].pergunta;
+    caixaAlternativas.innerHTML = "";
+
+    perguntas[indiceAtual].alternativas.forEach(alternativa => {
+        const botao = document.createElement("button");
+        botao.textContent = alternativa.texto;
+        botao.onclick = () => verificaResposta(alternativa.correta);
+        caixaAlternativas.appendChild(botao);
+    });
+}
+
+function verificaResposta(correta) {
+    if (correta) acertos++;
+    indiceAtual++;
+    mostraPergunta();
+}
+
+function mostraResultado() {
+    caixaPerguntas.textContent = "Missão concluída!";
+    caixaAlternativas.innerHTML = "";
+    textoResultado.textContent = `Você acertou ${acertos} de ${perguntas.length} perguntas.`;
+}
+
+mostraPergunta();
